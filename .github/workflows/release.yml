@@ -1,34 +1,14 @@
 on:
   push:
-    # Sequence of patterns matched against refs/tags
     tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      - 'v*'
 
 name: Create Release
 
 jobs:
-  create-release:
-    name: Create Release
-    runs-on: windows-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: false
-          prerelease: false
   publish:
     name: Publish with PyInstaller
+    id: publish-app
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
@@ -45,5 +25,36 @@ jobs:
       run: |
         pyinstaller app.py --clean --noconfirm --noconsole
         Compress-Archive -Path .\dist\app\* -DestinationPath .\dist\release.zip
-        # todo: upload as artefact downloadable from release
-          
+  create-release:
+    needs: publish-app
+    name: Create Release
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - TODO
+
+            Known issues
+            - TODO
+          draft: true
+          prerelease: false
+      - name: Upload Release Assets
+        id: upload-release-assets 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: .\dist\release.zip
+          asset_name: release-${{ github.ref }}.zip
+          asset_content_type: application/zip
