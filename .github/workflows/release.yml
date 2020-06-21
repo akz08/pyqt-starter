@@ -25,11 +25,12 @@ jobs:
     - name: Create binaries with PyInstaller
       run: |
         pyinstaller app.py --clean --noconfirm --noconsole
+        Compress-Archive -Path .\dist\app\* -DestinationPath .\dist\release.zip
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: release
-        path: .\dist\app
+        path: .\dist\release.zip
   create-release:
     needs: publish
     name: Create Release
@@ -66,6 +67,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: release-artifact/
           asset_name: release-${{ env.RELEASE_VERSION }}.zip
+          asset_path: release-artifact/release.zip
+          asset_name: release-dummy.zip
           asset_content_type: application/zip
