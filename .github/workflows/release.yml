@@ -56,7 +56,7 @@ jobs:
           draft: true
           prerelease: false
       - run: |
-          ls release
+          ls
           echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
       - name: Upload Release Assets
         id: upload-release-assets 
