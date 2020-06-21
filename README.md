@@ -1,3 +1,5 @@
+![](https://github.com/akz08/pyqt-starter/workflows/CI/badge.svg)
+
 # Initial setup
 To help setup a development environment, you can either install the dependencies manually, or execute the Windows PowerShell script init.ps1 which uses [Chocolatey](https://chocolatey.org/docs/getting-started) to help install the necessary dependencies on your Windows machine. This has been tested on a [Windows 10 virtual machine](https://developer.microsoft.com/en-us/windows/downloads/virtual-machines/) with a 2 month license, but should work just as well on a local Windows 10 installation.
 
