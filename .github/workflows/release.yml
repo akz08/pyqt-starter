@@ -8,7 +8,6 @@ name: Create Release
 jobs:
   publish:
     name: Publish with PyInstaller
-    id: publish-app
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
@@ -26,7 +25,7 @@ jobs:
         pyinstaller app.py --clean --noconfirm --noconsole
         Compress-Archive -Path .\dist\app\* -DestinationPath .\dist\release.zip
   create-release:
-    needs: publish-app
+    needs: publish
     name: Create Release
     runs-on: windows-latest
     steps:
