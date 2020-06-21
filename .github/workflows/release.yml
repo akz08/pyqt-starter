@@ -49,14 +49,15 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: |
-            Changes in this Release:
+            Changes in this release:
             - TODO
 
             Known issues:
             - TODO
           draft: true
           prerelease: false
-      - run: |
+      - name: Set release version in env
+        run: |
           echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
       - name: Upload Release Assets
         id: upload-release-assets 
