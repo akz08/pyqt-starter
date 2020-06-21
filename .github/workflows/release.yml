@@ -2,6 +2,8 @@ on:
   push:
     tags:
       - 'v*'
+  pull_request:
+    branches: [ master ]
 
 name: Create Release
 
@@ -54,8 +56,8 @@ jobs:
           draft: true
           prerelease: false
       - run: |
-        ls release
-        echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
+          ls release
+          echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
       - name: Upload Release Assets
         id: upload-release-assets 
         uses: actions/upload-release-asset@v1
