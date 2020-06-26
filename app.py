@@ -1,27 +1,33 @@
 import sys
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget
-from PyQt5.QtCore import QSize    
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel
+from PyQt5.QtGui import QFont, QIcon
+from PyQt5.QtWinExtras import QtWin
 
-class HelloWindow(QMainWindow):
+# todo: replace with your own app id
+appid = 'mycompany.myproduct.subproduct.version'
+QtWin.setCurrentProcessExplicitAppUserModelID(appid)    
+
+class HelloWindow(QWidget):
     def __init__(self):
-        QMainWindow.__init__(self)
+        super().__init__()
+        self.initialiseUI()
 
-        self.setMinimumSize(QSize(320, 240))    
-        self.setWindowTitle("Hello world") 
+    def initialiseUI(self):
+        self.setGeometry(100, 100, 400, 300)
+        self.setWindowTitle('Empty PyQt window')
+        self.displayLabels()
 
-        centralWidget = QWidget(self)          
-        self.setCentralWidget(centralWidget)   
+        self.show()
 
-        gridLayout = QGridLayout(self)     
-        centralWidget.setLayout(gridLayout)  
+    def displayLabels(self):
+        text = QLabel(self)
+        text.setText('Hello World')
+        text.move(85, 140)
+        text.setFont(QFont('Arial', 20))
 
-        title = QLabel("Hello World from PyQt", self) 
-        title.setAlignment(QtCore.Qt.AlignCenter) 
-        gridLayout.addWidget(title, 0, 0)
-
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
+if __name__ == '__main__':
+    # app = QApplication(sys.argv) # if we expect to get arguments
+    app = QApplication([])
+    app.setWindowIcon(QIcon('icons/app.ico'))
     mainWin = HelloWindow()
-    mainWin.show()
     sys.exit( app.exec_() )
