@@ -1,6 +1,6 @@
 # Based on scripts detailed here (20/06/2020): https://octopus.com/blog/automate-developer-machine-setup-with-chocolatey
 
-$chocolateyAppList = "python,git,github-desktop"
+$chocolateyAppList = "python --version=3.6.8,git,github-desktop"
 
 if ([string]::IsNullOrWhiteSpace($chocolateyAppList) -eq $false)
 {
@@ -20,6 +20,6 @@ if ([string]::IsNullOrWhiteSpace($chocolateyAppList) -eq $false){
     foreach ($app in $appsToInstall)
     {
         Write-Host "Installing $app"
-        & choco install $app /y | Write-Output
+        & Invoke-Expression "choco install $app -y" | Write-Output
     }
 }
