@@ -21,7 +21,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest
-        if (Test-Path "requirements.txt" -PathType leaf) { pip install -r requirements.txt }
+        pip install -r requirements.txt
     - name: Create binaries with PyInstaller
       run: |
         pyinstaller app.py --clean --noconfirm --noconsole
