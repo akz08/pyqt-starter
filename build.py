@@ -1,14 +1,13 @@
-from fbs import activate_profile, path, SETTINGS
+from fbs import activate_profile, SETTINGS
 from fbs.builtin_commands import clean, freeze, installer
-from fbs.builtin_commands._util import require_existing_project, update_json
+from fbs.builtin_commands._util import require_existing_project
 from fbs.cmdline import command
+import fbs.cmdline
 
 import logging
-
-_LOG = logging.getLogger(__name__)
 from os.path import dirname
 
-import fbs.cmdline
+_LOG = logging.getLogger(__name__)
 
 @command
 def release_versioned(version):
@@ -25,19 +24,9 @@ def release_versioned(version):
     try:
         clean()
         freeze()
-        # if is_windows() and _has_windows_codesigning_certificate():
-        #     sign()
         installer()
-        # if (is_windows() and _has_windows_codesigning_certificate()) or \
-        #     is_arch_linux() or is_fedora():
-        #     sign_installer()
-        # repo()
     finally:
         _LOG.setLevel(log_level)
-    # upload()
-    base_json = 'src/build/settings/base.json'
-    update_json(path(base_json), { 'version': version })
-    _LOG.info('Also, %s was updated with the new version.', base_json)
 
 if __name__ == '__main__':
     project_dir = dirname(__file__)
