@@ -41,7 +41,7 @@ jobs:
         if (Test-Path "requirements.txt" -PathType leaf) { pip install -r requirements.txt }
     - name: Create installer with fbs
       run: |
-        fbs freeze
+        python build.py release_versioned ${{ 0.0.1 }}
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
