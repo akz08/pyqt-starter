@@ -1,6 +1,6 @@
 from fbs import activate_profile, SETTINGS
 from fbs.builtin_commands import clean, freeze, installer
-from fbs.builtin_commands._util import require_existing_project
+from fbs.builtin_commands._util import require_existing_project, update_json
 from fbs.cmdline import command
 
 import logging
