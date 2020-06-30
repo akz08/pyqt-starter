@@ -7,7 +7,7 @@
 *.egg
 *.egg-info
 dist
-build
+build/*
 eggs
 parts
 bin
@@ -40,3 +40,7 @@ venv
 # Environment files
 .env
 .env-mysql
+
+# fbs
+!build/settings/*
+target
