@@ -9,8 +9,10 @@ on:
 
 jobs:
   publish:
-    name: Publish with PyInstaller
+    name: Publish with fbs
     runs-on: windows-latest
+    outputs:
+      release-version: ${{ steps.extract-version.outputs.release-version }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.6
@@ -23,22 +25,21 @@ jobs:
         pip install flake8 pytest
         pip install -r requirements.txt
     - name: Set release version in env
-        run: |
-          $found = $GITHUB_REF -match 'refs/tags/(v.*)'
-          If ($found) { $env:RELEASE_VERSION = $matches[1] } Else { ::error }
+      id: extract-version
+      run: |
+        $found = $env:GITHUB_REF -match 'refs/tags/(v.*)'
+        $version = $matches[1]
+        echo $version
+        echo "::set-output name=release-version::$version"
     - name: Create installer with fbs
       run: |
-        $version = "1.0.0"
-        python build.py release_versioned $env:RELEASE_VERSION
-    - name: Create binaries with PyInstaller
-      run: |
-        pyinstaller app.py --clean --noconfirm --noconsole
-        Compress-Archive -Path .\dist\app\* -DestinationPath .\dist\release.zip
+        python build.py release_versioned ${{ steps.extract-version.outputs.release-version }}
+        Compress-Archive -Path .\target\* -DestinationPath .\target\release.zip
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: release
-        path: .\dist\release.zip
+        path: .\target\release.zip
   create-release:
     needs: publish
     name: Create Release
@@ -49,7 +50,7 @@ jobs:
           name: release
           path: release-artifact
       - name: Create Release
-        id: create_release
+        id: create-release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -70,7 +71,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
           asset_path: release-artifact/release.zip
-          asset_name: ${{ env.APP_NAME }}-${{ env.RELEASE_VERSION }}.zip
+          asset_name: ${{ env.APP_NAME }}-${{ needs.publish.outputs.release-version }}.zip
           asset_content_type: application/zip
