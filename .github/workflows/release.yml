@@ -24,11 +24,12 @@ jobs:
         pip install -r requirements.txt
     - name: Set release version in env
       run: |
-        $found = $GITHUB_REF -match 'refs/tags/(v.*)'
+        $found = $env:GITHUB_REF -match 'refs/tags/(v.*)'
+        Write-Host $env:GITHUB_REF
         If ($found) { $env:RELEASE_VERSION = $matches[1] } Else { exit }
+        Write-Host $env:RELEASE_VERSION
     - name: Create installer with fbs
       run: |
-        $version = "1.0.0"
         python build.py release_versioned $env:RELEASE_VERSION
     - name: Upload artifact
       uses: actions/upload-artifact@v2
