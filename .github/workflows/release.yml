@@ -23,9 +23,9 @@ jobs:
         pip install flake8 pytest
         pip install -r requirements.txt
     - name: Set release version in env
-        run: |
-          $found = $GITHUB_REF -match 'refs/tags/(v.*)'
-          If ($found) { $env:RELEASE_VERSION = $matches[1] } Else { ::error }
+      run: |
+        $found = $GITHUB_REF -match 'refs/tags/(v.*)'
+        If ($found) { $env:RELEASE_VERSION = $matches[1] } Else { ::error }
     - name: Create installer with fbs
       run: |
         $version = "1.0.0"
