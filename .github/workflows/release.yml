@@ -9,7 +9,7 @@ on:
 
 jobs:
   publish:
-    name: Publish with PyInstaller
+    name: Publish with fbs
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
@@ -30,15 +30,11 @@ jobs:
       run: |
         $version = "1.0.0"
         python build.py release_versioned $env:RELEASE_VERSION
-    - name: Create binaries with PyInstaller
-      run: |
-        pyinstaller app.py --clean --noconfirm --noconsole
-        Compress-Archive -Path .\dist\app\* -DestinationPath .\dist\release.zip
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: release
-        path: .\dist\release.zip
+        path: .\target
   create-release:
     needs: publish
     name: Create Release
