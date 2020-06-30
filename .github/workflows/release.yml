@@ -25,7 +25,7 @@ jobs:
     - name: Set release version in env
       run: |
         $found = $GITHUB_REF -match 'refs/tags/(v.*)'
-        If ($found) { $env:RELEASE_VERSION = $matches[1] } Else { ::error }
+        If ($found) { $env:RELEASE_VERSION = $matches[1] } Else { exit }
     - name: Create installer with fbs
       run: |
         $version = "1.0.0"
