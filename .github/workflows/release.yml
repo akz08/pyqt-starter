@@ -31,7 +31,8 @@ jobs:
         echo ${env:RELEASE_VERSION}
     - name: Create installer with fbs
       run: |
-        python build.py release_versioned $env:RELEASE_VERSION
+      echo ${env:RELEASE_VERSION}
+        python build.py release_versioned ${env:RELEASE_VERSION}
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
