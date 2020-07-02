@@ -28,10 +28,12 @@ jobs:
       id: extract-version
       run: |
         $found = $env:GITHUB_REF -match 'refs/tags/(v.*)'
-        echo "::set-output name=release-version::$matches[1]"
+        $version = $matches[1]
+        echo $version
+        echo "::set-output name=release-version::$version"
     - name: Create installer with fbs
       run: |
-        echo ${{ steps.extract-version.outputs.release-version }}
+        echo "${{ steps.extract-version.outputs.release-version }}"
         python build.py release_versioned ${{ steps.extract-version.outputs.release-version }}
     - name: Upload artifact
       uses: actions/upload-artifact@v2
