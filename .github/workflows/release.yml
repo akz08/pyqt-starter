@@ -34,11 +34,12 @@ jobs:
     - name: Create installer with fbs
       run: |
         python build.py release_versioned ${{ steps.extract-version.outputs.release-version }}
+        Compress-Archive -Path .\target\* -DestinationPath .\target\release.zip
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: release
-        path: .\target
+        path: .\target\release.zip
   create-release:
     needs: publish
     name: Create Release
@@ -49,7 +50,7 @@ jobs:
           name: release
           path: release-artifact
       - name: Create Release
-        id: create_release
+        id: create-release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -70,7 +71,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: release-artifact/target
-          asset_name: ${{ env.APP_NAME }}-${{ needs.publish.output.release-version }}.zip
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: release-artifact/release.zip
+          asset_name: ${{ env.APP_NAME }}-${{ needs.publish.outputs.release-version }}.zip
           asset_content_type: application/zip
