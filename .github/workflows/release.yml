@@ -25,9 +25,10 @@ jobs:
     - name: Set release version in env
       run: |
         $found = $env:GITHUB_REF -match 'refs/tags/(v.*)'
-        Write-Host $env:GITHUB_REF
+        echo ${env:GITHUB_REF}
         If ($found) { $env:RELEASE_VERSION = $matches[1] } Else { exit }
-        Write-Host $env:RELEASE_VERSION
+        echo ${env:matches}
+        echo ${env:RELEASE_VERSION}
     - name: Create installer with fbs
       run: |
         python build.py release_versioned $env:RELEASE_VERSION
