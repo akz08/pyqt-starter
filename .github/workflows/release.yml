@@ -30,10 +30,6 @@ jobs:
         $found = $env:GITHUB_REF -match 'refs/tags/(v.*)'
         echo ::set-output name=release_version::$matches[1]
     - name: Create installer with fbs
-      inputs:
-        version:
-          description: 'Release version'
-          required: true
       run: |
         echo ${{ steps.extract-version.outputs.release-version }}
         python build.py release_versioned ${{ steps.extract-version.outputs.release-version }}
