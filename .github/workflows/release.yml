@@ -28,7 +28,7 @@ jobs:
       id: extract-version
       run: |
         $found = $env:GITHUB_REF -match 'refs/tags/(v.*)'
-        echo ::set-output name=release_version::$matches[1]
+        echo "::set-output name=release_version::$matches[1]"
     - name: Create installer with fbs
       run: |
         echo ${{ steps.extract-version.outputs.release-version }}
