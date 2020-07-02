@@ -25,13 +25,14 @@ jobs:
     - name: Set release version in env
       run: |
         $found = $env:GITHUB_REF -match 'refs/tags/(v.*)'
-        If ($found) { $RELEASE_VERSION = $matches[1] } Else { exit }
-      env:
-        RELEASE_VERSION: ${RELEASE_VERSION}
+        echo ::set-output name=version::$matches[1]
     - name: Create installer with fbs
+      inputs:
+        version:
+          required: true
       run: |
-        echo ${env:RELEASE_VERSION}
-        python build.py release_versioned ${env:RELEASE_VERSION}
+        echo ${env:INPUT_VERSION}
+        python build.py release_versioned $env:INPUT_VERSION
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
